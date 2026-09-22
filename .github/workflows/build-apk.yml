@@ -31,12 +31,15 @@ jobs:
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
         with:
-          packages: 'platforms;android-37.0 platforms;android-36 build-tools;36.0.0'
+          packages: 'platforms;android-36 build-tools;36.0.0'
 
-      - name: Accept Android SDK Licenses & Install Components
+      - name: Configure Android SDK permissions & licenses
         run: |
+          if [ -d "$ANDROID_HOME" ]; then
+            sudo chown -R $USER:$USER "$ANDROID_HOME" 2>/dev/null || true
+          fi
           yes | sdkmanager --licenses || true
-          sdkmanager --install "platforms;android-37.0" "platforms;android-36" || true
+          sdkmanager --install "platforms;android-36" "build-tools;36.0.0" || true
 
       - name: Self-healing & Environment Prep
         run: |
@@ -85,10 +88,13 @@ jobs:
           APK_PATH=$(find app/build/outputs/apk/debug -name "*.apk" | head -n 1)
           if [ -f "$APK_PATH" ]; then
             DEST_APK="热处理中级工考试-v${VERSION_NAME}.apk"
+            DEST_ENG="HeatTreatmentExam-v${VERSION_NAME}.apk"
             cp "$APK_PATH" "$DEST_APK"
+            cp "$APK_PATH" "$DEST_ENG"
             cp "$APK_PATH" "app-release.apk"
             echo "APK_FILE=$DEST_APK" >> $GITHUB_OUTPUT
-            echo "APK generated: $DEST_APK and app-release.apk"
+            echo "ENG_APK=$DEST_ENG" >> $GITHUB_OUTPUT
+            echo "APK generated: $DEST_APK, $DEST_ENG and app-release.apk"
           else
             echo "APK not found!"
             exit 1
@@ -100,6 +106,7 @@ jobs:
           name: app-debug-v${{ steps.extract_version.outputs.VERSION_NAME }}
           path: |
             ${{ steps.extract_version.outputs.APK_FILE }}
+            ${{ steps.extract_version.outputs.ENG_APK }}
             app-release.apk
 
       - name: Create GitHub Release
@@ -113,6 +120,7 @@ jobs:
           prerelease: false
           files: |
             ${{ steps.extract_version.outputs.APK_FILE }}
+            ${{ steps.extract_version.outputs.ENG_APK }}
             app-release.apk
           generate_release_notes: true
         env:

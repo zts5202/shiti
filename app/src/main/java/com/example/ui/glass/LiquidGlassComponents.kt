@@ -32,9 +32,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import com.example.ui.theme.ThemeManager
-import com.qmdeve.liquidglass.widget.LiquidGlassView
 
 /**
  * Optical styles for Liquid Glass
@@ -45,60 +43,6 @@ enum class GlassIntensity {
     HERO,        // Deep optical refraction, dispersion & caustic glow for header banners & stats
     ALERT_ERROR, // Tempered crimson glass for wrong answers
     ALERT_CORRECT// Quenched emerald glass for correct answers
-}
-
-/**
- * Native AndroidLiquidGlassView integration in Jetpack Compose.
- */
-@Composable
-fun NativeLiquidGlassView(
-    modifier: Modifier = Modifier,
-    cornerRadiusDp: Float = 24f,
-    refractionHeight: Float = 28f,
-    dispersion: Float = 1.8f
-) {
-    val context = LocalContext.current
-    val isDark = ThemeManager.isDarkMode
-    AndroidView(
-        modifier = modifier,
-        factory = { ctx ->
-            LiquidGlassView(ctx).apply {
-                val density = ctx.resources.displayMetrics.density
-                setCornerRadius(cornerRadiusDp * density)
-                setRefractionHeight(refractionHeight * density)
-                setRefractionOffset(12f * density)
-                setDispersion(dispersion)
-                if (isDark) {
-                    setTintColorRed(0.12f)
-                    setTintColorGreen(0.18f)
-                    setTintColorBlue(0.28f)
-                    setTintAlpha(0.25f)
-                } else {
-                    setTintColorRed(0.98f)
-                    setTintColorGreen(0.99f)
-                    setTintColorBlue(1.0f)
-                    setTintAlpha(0.70f)
-                }
-                setDraggableEnabled(false)
-                setTouchEffectEnabled(true)
-
-                if (ctx is Activity) {
-                    val root = ctx.window.decorView.findViewById<ViewGroup>(android.R.id.content)
-                    if (root != null) {
-                        try {
-                            bind(root)
-                        } catch (e: Exception) {
-                            e.printStackTrace()
-                        }
-                    }
-                }
-            }
-        },
-        update = { view ->
-            val density = view.context.resources.displayMetrics.density
-            view.setCornerRadius(cornerRadiusDp * density)
-        }
-    )
 }
 
 /**

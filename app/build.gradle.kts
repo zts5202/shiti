@@ -11,14 +11,14 @@ plugins {
 
 android {
   namespace = "com.example"
-  compileSdk = 37
+  compileSdk = 36
 
   defaultConfig {
     applicationId = "com.aistudio.heattreatment.exam"
     minSdk = 24
-    targetSdk = 36
-    versionCode = 6
-    versionName = "1.2.2"
+    targetSdk = 35
+    versionCode = 7
+    versionName = "1.2.3"
 
     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
   }
@@ -100,7 +100,6 @@ dependencies {
   implementation(libs.androidx.navigation.compose)
   implementation(libs.androidx.room.ktx)
   implementation(libs.androidx.room.runtime)
-  implementation("com.qmdeve.liquidglass:core:1.0.5")
   // implementation(libs.coil.compose)
   implementation(libs.converter.moshi)
   implementation(libs.firebase.ai)

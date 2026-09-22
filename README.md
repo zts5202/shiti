@@ -8,28 +8,33 @@
 
 ## 📱 手机直装 APK 下载方式（无需本地编译）
 
-### 推荐方式一：手机浏览器一键直链极速下载（最稳定，不会变成 .bin 或 .html）
-在手机浏览器（Edge、Chrome、自带浏览器）中直接访问以下直链即可自动触发 APK 下载：
+### 🚀 推荐一：国内手机极速直链（免翻墙、不限速、一键直接下载）
+直接在手机自带浏览器、微信或 Edge 中点击以下任一镜像高速下载链接（22.8MB 完整安装包）：
 
-👉 **[点击直接下载最新直装包 (app-release.apk)](https://github.com/zts5202/shiti/raw/main/app-release.apk)**
-
-> 📌 **重要下载提示**：
-> 1. 请点击上方蓝色直链，或者在仓库文件列表中找到 **`app-release.apk`** 点击后，在打开的页面点击 **「Download raw file」** 或 **「View raw」**。
-> 2. **切勿长按文件链接选择“另存为链接”**，长按保存会将 GitHub 的网页 HTML 代码保存下来，导致安装时提示“解析软件包错误”。
-> 3. 如果手机浏览器下载后文件名被改为了 `.bin`，只需在手机文件管理器中将其重命名后缀为 `.apk` 即可正常安装。
+- 🔗 **[极速镜像下载 1 (ghfast 高速镜像 - 推荐)](https://ghfast.top/https://raw.githubusercontent.com/zts5202/shiti/main/app-release.apk)**
+- 🔗 **[极速镜像下载 2 (ghproxy 备用镜像)](https://ghproxy.cn/https://raw.githubusercontent.com/zts5202/shiti/main/app-release.apk)**
+- 🔗 **[极速镜像下载 3 (纯英文包名防乱码下载)](https://ghfast.top/https://raw.githubusercontent.com/zts5202/shiti/main/HeatTreatmentExam-v1.2.3.apk)**
 
 ---
 
-### 推荐方式二：GitHub Releases 官方发布页（带版本记录）
-- 访问 [GitHub Releases 页面](https://github.com/zts5202/shiti/releases)
-- 点击最新版本的 **Assets** 下的 `app-release.apk` 或 `热处理中级工考试-v1.2.2.apk` 即可下载。
+### 🌐 推荐二：GitHub 官方直连下载
+- 👉 **[GitHub 官方源文件直链 (app-release.apk)](https://github.com/zts5202/shiti/raw/main/app-release.apk)**
+- 👉 **[GitHub Releases 官方发布页](https://github.com/zts5202/shiti/releases)**
+
+> 📌 **手机安装避坑指南**：
+> 1. **为什么之前直接在 GitHub 上点下载不了或提示解析错误？**  
+>    在手机浏览器中访问 GitHub 网页长按或直接保存有时会误存为 HTML 网页（只有几十KB），或者被网络阻断下载中断，未下载完整便安装就会提示“解析软件包错误”。请使用上方的【国内极速镜像下载】链接，下载满 22.8MB 即可秒装。
+> 2. **下载后变成 `.bin` 或 `.zip` 怎么办？**  
+>    部分手机浏览器（如部分厂商自带浏览器）为了安全会自动修改后缀，在手机自带“文件管理”或“下载管理”中将后缀名改回为 `.apk` 即可直接点击安装。
+> 3. **安装时提示“未知来源应用”？**  
+>    点击“允许本次安装”或在手机设置中开启“允许来自此来源的应用”即可。
 
 ---
 
-### 推荐方式三：GitHub Actions 自动构建产物 (Artifacts)
+### 📦 推荐三：GitHub Actions 自动构建产物 (Artifacts)
 - 进入 [Actions 页面](https://github.com/zts5202/shiti/actions)
-- 点击最新成功的运行记录
-- 滚动到页面底部 **Artifacts** 区域，点击 `app-debug-v1.2.2` 即可直接打包下载。
+- 点击最新绿标成功的构建记录
+- 滚动到页面底部 **Artifacts** 区域，点击 `app-debug-v1.2.3` 即可下载。
 
 ---
 
