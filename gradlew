@@ -150,6 +150,5 @@ reset () {
 reset
 save "$@"
 
-# Collect all arguments for the java command.
-set -- "$JAVACMD" "$@"
+# Execute Gradle
 exec "$JAVACMD" "-Dorg.gradle.appname=$APP_BASE_NAME" -classpath "$CLASSPATH" org.gradle.wrapper.GradleWrapperMain "$@"

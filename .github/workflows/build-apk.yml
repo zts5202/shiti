@@ -21,11 +21,11 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up JDK 17
+      - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
-          java-version: '17'
+          java-version: '21'
           cache: 'gradle'
 
       - name: Self-healing & Environment Prep
@@ -50,7 +50,7 @@ jobs:
             fi
           fi
 
-          # Ensure gradlew is executable
+          # 3. Ensure gradlew is executable
           if [ -f gradlew ]; then
             chmod +x gradlew
           fi
@@ -63,13 +63,12 @@ jobs:
             gradle assembleDebug --stacktrace
           fi
 
-      - name: Extract Version Name & Copy APK
+      - name: Extract Version Name & Prepare APK
         id: extract_version
         run: |
-          # Extract versionName from app/build.gradle.kts
           VERSION_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | head -n 1 | cut -d '"' -f 2)
           if [ -z "$VERSION_NAME" ]; then
-            VERSION_NAME="1.0.0"
+            VERSION_NAME="1.2.0"
           fi
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
 
@@ -93,9 +92,10 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         if: startsWith(github.ref, 'refs/heads/')
+        continue-on-error: true
         with:
           tag_name: v${{ steps.extract_version.outputs.VERSION_NAME }}
-          name: Release v${{ steps.extract_version.outputs.VERSION_NAME }}
+          name: 热处理中级工考试 v${{ steps.extract_version.outputs.VERSION_NAME }}
           draft: false
           prerelease: false
           files: ${{ steps.extract_version.outputs.APK_FILE }}
