@@ -28,6 +28,16 @@ jobs:
           java-version: '21'
           cache: 'gradle'
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-37.0 platforms;android-36 build-tools;36.0.0'
+
+      - name: Accept Android SDK Licenses & Install Components
+        run: |
+          yes | sdkmanager --licenses || true
+          sdkmanager --install "platforms;android-37.0" "platforms;android-36" || true
+
       - name: Self-healing & Environment Prep
         run: |
           # 1. Self-healing .env
@@ -58,9 +68,9 @@ jobs:
       - name: Build Debug APK
         run: |
           if [ -f gradlew ]; then
-            ./gradlew assembleDebug --stacktrace
+            ./gradlew assembleDebug --stacktrace -Pandroid.builder.sdkDownload=true
           else
-            gradle assembleDebug --stacktrace
+            gradle assembleDebug --stacktrace -Pandroid.builder.sdkDownload=true
           fi
 
       - name: Extract Version Name & Prepare APK
@@ -68,7 +78,7 @@ jobs:
         run: |
           VERSION_NAME=$(grep -o 'versionName = "[^"]*"' app/build.gradle.kts | head -n 1 | cut -d '"' -f 2)
           if [ -z "$VERSION_NAME" ]; then
-            VERSION_NAME="1.2.0"
+            VERSION_NAME="1.2.2"
           fi
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
 
@@ -76,8 +86,9 @@ jobs:
           if [ -f "$APK_PATH" ]; then
             DEST_APK="热处理中级工考试-v${VERSION_NAME}.apk"
             cp "$APK_PATH" "$DEST_APK"
+            cp "$APK_PATH" "app-release.apk"
             echo "APK_FILE=$DEST_APK" >> $GITHUB_OUTPUT
-            echo "APK generated: $DEST_APK"
+            echo "APK generated: $DEST_APK and app-release.apk"
           else
             echo "APK not found!"
             exit 1
@@ -87,7 +98,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-v${{ steps.extract_version.outputs.VERSION_NAME }}
-          path: ${{ steps.extract_version.outputs.APK_FILE }}
+          path: |
+            ${{ steps.extract_version.outputs.APK_FILE }}
+            app-release.apk
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
@@ -98,7 +111,9 @@ jobs:
           name: 热处理中级工考试 v${{ steps.extract_version.outputs.VERSION_NAME }}
           draft: false
           prerelease: false
-          files: ${{ steps.extract_version.outputs.APK_FILE }}
+          files: |
+            ${{ steps.extract_version.outputs.APK_FILE }}
+            app-release.apk
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

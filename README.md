@@ -6,32 +6,41 @@
 
 ---
 
-## 📱 手机直装 APK 下载
+## 📱 手机直装 APK 下载方式（无需本地编译）
 
-您可以通过以下三种方式直接下载安装包，无需在本地编译：
+### 推荐方式一：手机浏览器一键直链极速下载（最稳定，不会变成 .bin 或 .html）
+在手机浏览器（Edge、Chrome、自带浏览器）中直接访问以下直链即可自动触发 APK 下载：
 
-1. **仓库根目录直接下载**：
-   - 根目录下已预置最新编译安装包：[`热处理中级工考试-v1.2.1.apk`](./热处理中级工考试-v1.2.1.apk)
-2. **GitHub Releases 发布页**：
-   - 点击右侧 [Releases](https://github.com/zts5202/shiti/releases) 下载对应版本的 APK 附件。
-3. **GitHub Actions 产物 (Artifacts)**：
-   - 进入 [Actions 页面](https://github.com/zts5202/shiti/actions) -> 点击最新的一次运行记录 -> 在底部 **Artifacts** 处点击 `app-debug-v1.2.1` 即可下载。
+👉 **[点击直接下载最新直装包 (app-release.apk)](https://github.com/zts5202/shiti/raw/main/app-release.apk)**
+
+> 📌 **重要下载提示**：
+> 1. 请点击上方蓝色直链，或者在仓库文件列表中找到 **`app-release.apk`** 点击后，在打开的页面点击 **「Download raw file」** 或 **「View raw」**。
+> 2. **切勿长按文件链接选择“另存为链接”**，长按保存会将 GitHub 的网页 HTML 代码保存下来，导致安装时提示“解析软件包错误”。
+> 3. 如果手机浏览器下载后文件名被改为了 `.bin`，只需在手机文件管理器中将其重命名后缀为 `.apk` 即可正常安装。
 
 ---
 
-## 🛠️ GitHub Actions 自动构建与发布说明
+### 推荐方式二：GitHub Releases 官方发布页（带版本记录）
+- 访问 [GitHub Releases 页面](https://github.com/zts5202/shiti/releases)
+- 点击最新版本的 **Assets** 下的 `app-release.apk` 或 `热处理中级工考试-v1.2.2.apk` 即可下载。
 
-本项目已配置完整的 GitHub Actions 自动化 CI/CD 流程（`.github/workflows/build-apk.yml`）：
-- 每次推送代码（Push）或手动触发（workflow_dispatch）时，云端容器将自动执行 JDK 21 环境准备、签名证书自愈并编译生成 Debug APK。
-- 编译完成后会自动上传构建产物（Artifacts），并同步推送至 GitHub Releases。
+---
 
-### ⚠️ 重要：如需 GitHub Actions 自动发布到 Releases
-GitHub 默认新建仓库可能对 Actions 的写入权限进行了限制。若在 Actions 页面看到 Releases 权限警告，请按以下步骤开启：
-1. 打开当前 GitHub 仓库的 **Settings**（设置）标签页；
-2. 在左侧菜单找到 **Actions** -> 点击 **General**；
-3. 向下滚动至 **Workflow permissions**（工作流权限）；
-4. 勾选 **Read and write permissions**（读取与写入权限）；
-5. 点击 **Save** 保存即可。
+### 推荐方式三：GitHub Actions 自动构建产物 (Artifacts)
+- 进入 [Actions 页面](https://github.com/zts5202/shiti/actions)
+- 点击最新成功的运行记录
+- 滚动到页面底部 **Artifacts** 区域，点击 `app-debug-v1.2.2` 即可直接打包下载。
+
+---
+
+## 🛠️ 关于 GitHub Actions 自动构建环境说明
+
+本项目核心依赖的物理级拟真玻璃组件需要 Android API 37（Android 16+），而 GitHub 官方默认 Ubuntu 虚拟机仅预装至 API 34/35。
+工作流脚本（`.github/workflows/build-apk.yml`）现已配置全套自动化环境补全机制：
+1. **自动引入 Android SDK 37.0**：通过 `android-actions/setup-android@v3` 动态拉取 `platforms;android-37.0`；
+2. **静默许可自愈**：通过 `sdkmanager --licenses` 自动接受 SDK 协议；
+3. **Gradle 自动按需补齐**：启用 `android.builder.sdkDownload=true`；
+4. **V1 + V2 + V3 签名机制**：保证在 Android 7.0 至 16 各品牌手机（华为/小米/OPPO/vivo/荣耀等）上均可无感安装。
 
 ---
 
