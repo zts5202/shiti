@@ -26,7 +26,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: 'gradle'
 
       - name: Set up Android SDK
         uses: android-actions/setup-android@v3
@@ -66,7 +65,7 @@ jobs:
             fi
           fi
 
-          # 3. Self-healing Gradle Wrapper JAR (handles case where .jar binary was not pushed to git)
+          # 3. Self-healing Gradle Wrapper JAR
           mkdir -p gradle/wrapper
           if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
             echo "gradle-wrapper.jar missing, restoring..."
@@ -80,13 +79,7 @@ jobs:
 
           # 4. Self-healing google-services.json
           if [ ! -f app/google-services.json ]; then
-            cat << 'EOF' > app/google-services.json
-{
-  "project_info": { "project_number": "123456789", "project_id": "heattreatment-exam" },
-  "client": [{ "client_info": { "mobilesdk_app_id": "1:123456789:android:exam", "android_client_info": { "package_name": "com.aistudio.heattreatment.exam" } } }],
-  "configuration_version": "1"
-}
-EOF
+            echo '{"project_info":{"project_number":"123456789","project_id":"heattreatment-exam"},"client":[{"client_info":{"mobilesdk_app_id":"1:123456789:android:exam","android_client_info":{"package_name":"com.aistudio.heattreatment.exam"}},"configuration_version":"1"}]}' > app/google-services.json
           fi
 
           # 5. Ensure gradlew is executable
