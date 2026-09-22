@@ -41,6 +41,9 @@ jobs:
           yes | sdkmanager --licenses || true
           sdkmanager --install "platforms;android-36" "build-tools;36.0.0" || true
 
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
       - name: Self-healing & Environment Prep
         run: |
           # 1. Self-healing .env
@@ -63,14 +66,37 @@ jobs:
             fi
           fi
 
-          # 3. Ensure gradlew is executable
+          # 3. Self-healing Gradle Wrapper JAR (handles case where .jar binary was not pushed to git)
+          mkdir -p gradle/wrapper
+          if [ ! -f gradle/wrapper/gradle-wrapper.jar ]; then
+            echo "gradle-wrapper.jar missing, restoring..."
+            if [ -f gradle/wrapper/gradle-wrapper.jar.base64 ]; then
+              base64 -d gradle/wrapper/gradle-wrapper.jar.base64 > gradle/wrapper/gradle-wrapper.jar
+            fi
+            if [ ! -s gradle/wrapper/gradle-wrapper.jar ]; then
+              curl -sLo gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v8.11.1/gradle/wrapper/gradle-wrapper.jar || true
+            fi
+          fi
+
+          # 4. Self-healing google-services.json
+          if [ ! -f app/google-services.json ]; then
+            cat << 'EOF' > app/google-services.json
+{
+  "project_info": { "project_number": "123456789", "project_id": "heattreatment-exam" },
+  "client": [{ "client_info": { "mobilesdk_app_id": "1:123456789:android:exam", "android_client_info": { "package_name": "com.aistudio.heattreatment.exam" } } }],
+  "configuration_version": "1"
+}
+EOF
+          fi
+
+          # 5. Ensure gradlew is executable
           if [ -f gradlew ]; then
             chmod +x gradlew
           fi
 
       - name: Build Debug APK
         run: |
-          if [ -f gradlew ]; then
+          if [ -f gradlew ] && [ -s gradle/wrapper/gradle-wrapper.jar ]; then
             ./gradlew assembleDebug --stacktrace -Pandroid.builder.sdkDownload=true
           else
             gradle assembleDebug --stacktrace -Pandroid.builder.sdkDownload=true
