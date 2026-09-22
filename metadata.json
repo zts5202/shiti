@@ -1,0 +1,6 @@
+{
+  "name": "热处理中级工",
+  "description": "热处理中级工考试题库训练应用，基于光学折射与色散 Liquid Glass 拟真玻璃材质视觉体系，支持顺序、随机、专项练习与模拟考试",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
